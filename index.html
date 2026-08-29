@@ -187,11 +187,19 @@
                     
                     <!-- Product Image Slot (Right Side in RTL) -->
                     <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-xl bg-slate-100 border border-slate-200/70 overflow-hidden shrink-0 flex items-center justify-center relative group-hover:border-[#2e5fa7]/40 transition-colors">
-                        <img :src="item.image || 'https://placehold.co/160x160/f1f5f9/94a3b8?text=%D8%B9%DA%A9%D8%B3'" 
-                             :alt="item.name" 
-                             class="w-full h-full object-cover transition-all duration-300"
-                             :style="item.imageStyle ? item.imageStyle : (item.imagePosition ? `object-position: ${item.imagePosition}` : '')"
-                             onerror="this.onerror=null; this.src='https://placehold.co/160x160/f1f5f9/94a3b8?text=%D8%B9%DA%A9%D8%B3';"/>
+                        <template x-if="item.image">
+                            <img :src="item.image" 
+                                 :alt="item.name" 
+                                 class="w-full h-full object-cover transition-all duration-300"
+                                 :style="item.imageStyle ? item.imageStyle : (item.imagePosition ? `object-position: ${item.imagePosition}` : '')"
+                                 onerror="this.onerror=null; this.src='https://placehold.co/160x160/f1f5f9/94a3b8?text=%D8%B9%DA%A9%D8%B3';"/>
+                        </template>
+                        <template x-if="!item.image">
+                            <div class="w-full h-full flex flex-col items-center justify-center bg-slate-100 text-slate-400">
+                                <i class="fa-regular fa-image text-lg opacity-60"></i>
+                                <span class="text-[9px] mt-1 font-medium text-slate-400">بدون تصویر</span>
+                            </div>
+                        </template>
                     </div>
 
                     <!-- Product Information -->
@@ -255,7 +263,8 @@
     <script>
         function cafeMenu() {
             return {
-                activeCategory: 'side',
+                // Default start category set to coffee (قهوه)
+                activeCategory: 'coffee',
                 currentOfferIndex: 0,
                 offerInterval: null,
                 highlightedItemId: null,
@@ -297,7 +306,7 @@
                     { id: 27, categoryId: 'side', name: 'کوکی رژیمی جو', customPriceLabel: 'همراه با چای و دمنوش', image: 'https://i.ibb.co/hJK00Lh7/oat-diet-cookie.jpg' },
                     { id: 28, categoryId: 'side', name: 'باقلوا بادام', customPriceLabel: 'همراه با چای و دمنوش', image: 'https://i.ibb.co/Bdyx4BB/almond-baklava.jpg' },
                     { id: 29, categoryId: 'side', name: 'باقلوا پسته', customPriceLabel: 'همراه با چای و دمنوش', image: 'https://i.ibb.co/PvhhQ7Pb/pistachio-baklava.jpg' },
-                    { id: 30, categoryId: 'side', name: 'باقلوا گردو', customPriceLabel: 'همراه با چای و دمنوش', image: 'https://ibb.co/WWnGkhJp/walnut-baklava.jpg' },
+                    { id: 30, categoryId: 'side', name: 'باقلوا گردو', customPriceLabel: 'همراه با چای و دمنوش', image: 'https://i.ibb.co/WWnGkhJp/walnut-baklava.jpg' },
 
                     // Cold Drinks Items
                     { id: 11, categoryId: 'cold', name: 'فیزیو', description: 'طعم‌ها: کولا موهیتو، کولا لیمو', price: '۷۵,۰۰۰', image: 'https://i.ibb.co/jZ1ctdWK/fizzio.jpg' },
