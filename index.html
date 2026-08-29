@@ -1,206 +1,358 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl">
+<html lang="fa" dir="rtl" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>INOTEX CAFE Menu</title>
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <!-- Google Fonts: Vazirmatn -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>کافه اینوتکس - منوی دیجیتال</title>
 
-  <style>
-    * {
-      font-family: 'Vazirmatn', sans-serif;
-      -webkit-tap-highlight-color: transparent;
-    }
-    body {
-      background-color: #0c0e14;
-      color: #f3f4f6;
-    }
-    .glass-header {
-      background: rgba(12, 14, 20, 0.85);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-    }
-    .active-tab {
-      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-      color: #0c0e14;
-      font-weight: 700;
-      box-shadow: 0 4px 15px rgba(245, 158, 11, 0.35);
-    }
-    .inactive-tab {
-      background: rgba(255, 255, 255, 0.04);
-      color: #9ca3af;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-    }
-    .card-gradient {
-      background: linear-gradient(180deg, rgba(26, 30, 42, 0.75) 0%, rgba(18, 21, 31, 0.9) 100%);
-      border: 1px solid rgba(255, 255, 255, 0.07);
-    }
-    .card-gradient:hover {
-      border-color: rgba(245, 158, 11, 0.4);
-      transform: translateY(-2px);
-    }
-  </style>
+    <!-- Global Unhandled Rejection Handler -->
+    <script>
+        window.addEventListener('unhandledrejection', function(event) {
+            if (event.reason && (event.reason.isFromCancelledTransition || event.reason.name === 'Cancelled')) {
+                event.preventDefault();
+            }
+        });
+    </script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Vazirmatn Font Stack -->
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        @font-face {
+            font-family: 'Modam';
+            src: local('Modam'), local('Modam-Regular'), url('https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/fonts/webfonts/Vazirmatn-Regular.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            font-family: 'Modam', 'Vazirmatn', sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .font-modam {
+            font-family: 'Modam', 'Vazirmatn', sans-serif;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.03);
+        }
+
+        .glass-header {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .price-color {
+            color: #2e5fa7;
+        }
+    </style>
 </head>
-<body class="min-h-screen pb-16 antialiased selection:bg-amber-500 selection:text-black">
+<body class="min-h-screen bg-slate-50 text-slate-800 pb-0 select-none overflow-x-hidden">
 
-  <!-- Header Section with Logo -->
-  <header class="sticky top-0 z-50 glass-header border-b border-white/10 px-4 py-3 shadow-md">
-    <div class="max-w-4xl mx-auto flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <img 
-          src="https://ibb.co/sdsnJB5g" 
-          alt="INOTEX CAFE Logo" 
-          class="h-10 md:h-12 w-auto object-contain"
-          onerror="this.style.display='none'; document.getElementById('alt-logo').classList.remove('hidden');"
-        />
-        <div id="alt-logo" class="hidden text-xl font-extrabold tracking-wider text-amber-400">
-          INOTEX <span class="text-white font-light text-sm">CAFÉ</span>
-        </div>
-      </div>
-      <span class="text-xs text-amber-400/90 font-medium px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/20">
-        منوی دیجیتال
-      </span>
-    </div>
-  </header>
+    <div x-data="cafeMenu()" class="max-w-md mx-auto min-h-screen flex flex-col relative shadow-2xl bg-slate-50/50 pb-0">
 
-  <!-- Main Container -->
-  <main class="max-w-4xl mx-auto px-4 mt-5">
-
-    <!-- Categories Navigation (Static Grid Layout) -->
-    <nav class="mb-6">
-      <div id="category-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
-        <!-- Category Buttons Rendered via JS -->
-      </div>
-    </nav>
-
-    <!-- Menu Items Grid -->
-    <div id="menu-items-container" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <!-- Cards Rendered via JS -->
-    </div>
-
-  </main>
-
-  <script>
-    // Data Definition
-    const menuData = [
-      // 1. قهوه (صفحه پیش‌فرض شروع)
-      {
-        category: "قهوه",
-        items: [
-          { name: "اسپرسو سینگل", desc: "۱۰۰٪ عربیکا تخصصی", price: "۵۵,۰۰۰", img: "https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?w=500&auto=format&fit=crop&q=60" },
-          { name: "اسپرسو دبل", desc: "دبل شات عربیکا با بادی غنی", price: "۶۵,۰۰۰", img: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=500&auto=format&fit=crop&q=60" },
-          { name: "آمریکانو", desc: "ترکیب اسپرسو دبل و آب جوش", price: "۷۰,۰۰۰", img: "https://images.unsplash.com/photo-1551030173-122aabc4489c?w=500&auto=format&fit=crop&q=60" },
-          { name: "لاته", desc: "اسپرسو، شیر بخار داده شده و فوم مخملی", price: "۸۵,۰۰۰", img: "https://images.unsplash.com/photo-1570968915860-54d5c301fa9f?w=500&auto=format&fit=crop&q=60" },
-          { name: "کاپوچینو", desc: "اسپرسو با فوم شیر غلیظ و پودر کاکائو", price: "۸۵,۰۰۰", img: "https://images.unsplash.com/photo-1534778101976-62847782c213?w=500&auto=format&fit=crop&q=60" },
-          { name: "کارامل ماکیاتو", desc: "ترکیب شیر، وانیل، اسپرسو و سس کارامل", price: "۹۵,۰۰۰", img: "https://images.unsplash.com/photo-1485808191679-5f86510681a2?w=500&auto=format&fit=crop&q=60" }
-        ]
-      },
-      // 2. تیرامیسو
-      {
-        category: "تیرامیسو",
-        items: [
-          { name: "تیرامیسو کلاسیک قهوه", desc: "لیدی فینگر، کرم ماسکارپونه، اسپرسو تازه", price: "۱۴۵,۰۰۰", img: "https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=500&auto=format&fit=crop&q=60" },
-          { name: "تیرامیسو شکلات", desc: "کرم ماسکارپونه شکلاتی و گاناش بلژیکی", price: "۱۵۵,۰۰۰", img: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=500&auto=format&fit=crop&q=60" },
-          { name: "تیرامیسو توت فرنگی", desc: "طعم میوه‌ای و سبک با پوره توت‌فرنگی تازه", price: "۱۶۰,۰۰۰", img: "https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=500&auto=format&fit=crop&q=60" }
-        ]
-      },
-      // 3. چای و دمنوش
-      {
-        category: "چای و دمنوش",
-        items: [
-          { name: "چای کلاسیک", desc: "همراه با ساید انتخابی", price: "۶۰,۰۰۰", img: "https://ibb.co/wrbXx0FY" },
-          { name: "چای مراکشی", desc: "همراه با ساید انتخابی", price: "۷۵,۰۰۰", img: "https://ibb.co/wrbXx0FY" },
-          { name: "دمنوش کندلوس", desc: "آرامش‌بخش و نشاط‌آور به همراه ساید", price: "۸۰,۰۰۰", img: "https://ibb.co/FLSjJbKg" },
-          { name: "دمنوش به و دارچین", desc: "عطر اصیل به و چوب دارچین طبیعی + ساید", price: "۸۰,۰۰۰", img: "https://ibb.co/1GMF4754" },
-          { name: "دمنوش سیب و دارچین", desc: "ترکیب دلنشین سیب خشک و دارچین + ساید", price: "۸۰,۰۰۰", img: "https://ibb.co/5xkYY8v0" },
-          { name: "دمنوش گل گاو زبان", desc: "سنتی، آرام‌بخش و تسکین‌دهنده + ساید", price: "۸۰,۰۰۰", img: "https://ibb.co/6RvcvV8n" }
-        ]
-      },
-      // 4. ساید
-      {
-        category: "ساید",
-        items: [
-          { name: "باقلوا گردو", desc: "باقلوای تازه و سنتی گردویی", price: "همراه با چای و دمنوش", img: "https://ibb.co/WWnGkhJp" },
-          { name: "باقلوا پسته", desc: "مغز پسته اعلا با شربت زعفران", price: "همراه با چای و دمنوش", img: "https://ibb.co/PvhhQ7Pb" },
-          { name: "باقلوا بادام", desc: "ترد و معطر با خلال بادام تازه", price: "همراه با چای و دمنوش", img: "https://ibb.co/Bdyx4BB" },
-          { name: "کوکی دبل چاکلت", desc: "کوکی شکلاتی غنی با تکه‌های شکلات تلخ", price: "همراه با چای و دمنوش", img: "https://ibb.co/zpvC2f7" },
-          { name: "کوکی گردو شکلات", desc: "ترکیب گردوی تازه و چیپس شکلات", price: "همراه با چای و دمنوش", img: "https://ibb.co/fYtxXhZ3" },
-          { name: "کوکی رژیمی جو", desc: "سالم و کم‌کالری تهیه شده از جو دوسر", price: "همراه با چای و دمنوش", img: "https://ibb.co/hJK00Lh7" }
-        ]
-      },
-      // 5. نوشیدنی سرد
-      {
-        category: "نوشیدنی سرد",
-        items: [
-          { name: "فیزیو", desc: "طعم‌ها: کولا موهیتو، کولا لیمو", price: "۹۰,۰۰۰", img: "https://ibb.co/jZ1ctdWK" },
-          { name: "آیس آمریکانو", desc: "اسپرسو دوبل، یخ، آب تصفیه شده", price: "۷۵,۰۰۰", img: "https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?w=500&auto=format&fit=crop&q=60" },
-          { name: "آیس لاته", desc: "شیر سرد، یخ و اسپرسو تازه", price: "۹۰,۰۰۰", img: "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=500&auto=format&fit=crop&q=60" }
-        ]
-      }
-    ];
-
-    // State: Default start tab set to 'قهوه'
-    let activeCategory = "قهوه";
-
-    function renderCategories() {
-      const container = document.getElementById("category-container");
-      container.innerHTML = menuData.map(cat => {
-        const isActive = cat.category === activeCategory;
-        const cls = isActive ? "active-tab" : "inactive-tab hover:bg-white/10";
-        return `
-          <button 
-            onclick="setCategory('${cat.category}')" 
-            class="py-2.5 px-3 rounded-xl text-xs sm:text-sm transition-all duration-200 text-center ${cls}">
-            ${cat.category}
-          </button>
-        `;
-      }).join("");
-    }
-
-    function renderItems() {
-      const container = document.getElementById("menu-items-container");
-      const current = menuData.find(c => c.category === activeCategory);
-      if (!current) return;
-
-      container.innerHTML = current.items.map(item => `
-        <div class="card-gradient rounded-2xl p-3.5 flex gap-3.5 items-center transition-all duration-300">
-          <div class="w-24 h-24 rounded-xl overflow-hidden bg-white/5 flex-shrink-0 relative">
-            <img 
-              src="${item.img}" 
-              alt="${item.name}" 
-              class="w-full h-full object-cover" 
-              onerror="this.src='https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=500&auto=format&fit=crop&q=60'"
-            />
-          </div>
-          <div class="flex-1 min-w-0">
-            <h3 class="text-base font-bold text-gray-100 truncate mb-1">${item.name}</h3>
-            <p class="text-xs text-gray-400 line-clamp-2 leading-relaxed mb-2">${item.desc}</p>
-            <div class="flex items-center justify-between">
-              <span class="text-xs sm:text-sm font-extrabold ${item.price.includes('تومان') || !isNaN(item.price.replace(/,/g, '')) ? 'text-amber-400' : 'text-emerald-400'}">
-                ${item.price} ${item.price.includes('همراه') ? '' : '<span class="text-[10px] font-normal text-gray-400">تومان</span>'}
-              </span>
+        <!-- Header -->
+        <header class="sticky top-0 z-40 glass-header py-3 px-4 transition-all duration-300 shadow-xs">
+            <div class="flex flex-col items-center justify-center text-center select-none font-modam">
+                <div class="h-12 sm:h-14 flex items-center justify-center">
+                    <img src="https://i.ibb.co/sdsnJB5g/logo.png" 
+                         onerror="if(this.src.indexOf('.png') !== -1){this.src='https://i.ibb.co/sdsnJB5g/logo.jpg';}else if(this.src.indexOf('.jpg') !== -1){this.src='https://i.ibb.co/sdsnJB5g/image.png';}"
+                         alt="لوگوی کافه اینوتکس" 
+                         class="max-h-full w-auto object-contain drop-shadow-xs transition-transform duration-300 hover:scale-105" />
+                </div>
+                <p class="text-[11px] sm:text-xs font-medium text-slate-500 mt-1 tracking-wider font-modam">
+                    Powered by <span class="font-semibold text-slate-700">Rowsha Cafe</span>
+                </p>
             </div>
-          </div>
+        </header>
+
+        <!-- Special Offers Banner (8-second sliding banner) -->
+        <div class="px-4 pt-3 pb-1">
+            <div @click="goToOffer(specialOffers[currentOfferIndex])"
+                 class="bg-gradient-to-r from-blue-950 via-blue-900 to-[#2e5fa7] rounded-2xl p-4 text-white shadow-lg shadow-blue-900/15 relative overflow-hidden group min-h-[110px] cursor-pointer hover:opacity-95 transition-all duration-300 active:scale-[0.99]">
+                
+                <!-- Background Image Overlay with Seamless Fade & Vignette -->
+                <template x-for="(offer, idx) in specialOffers" :key="idx">
+                    <div x-show="currentOfferIndex === idx"
+                         x-transition:enter="transition opacity ease-in-out duration-1000"
+                         x-transition:enter-start="opacity-0"
+                         x-transition:enter-end="opacity-100"
+                         x-transition:leave="transition opacity ease-in-out duration-1000 absolute inset-0"
+                         x-transition:leave-start="opacity-100"
+                         x-transition:leave-end="opacity-0"
+                         class="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+                        
+                        <!-- Smooth right-to-left alpha mask container -->
+                        <div class="absolute left-0 top-0 w-7/12 h-full [mask-image:linear-gradient(to_right,rgba(0,0,0,1)_0%,rgba(0,0,0,0.85)_40%,rgba(0,0,0,0.3)_75%,rgba(0,0,0,0)_100%)] [-webkit-mask-image:linear-gradient(to_right,rgba(0,0,0,1)_0%,rgba(0,0,0,0.85)_40%,rgba(0,0,0,0.3)_75%,rgba(0,0,0,0)_100%)]">
+                            <img :src="offer.image" :alt="offer.name" class="w-full h-full object-cover object-center" />
+                        </div>
+                        
+                        <!-- Gradient overlays for smooth blend with banner theme -->
+                        <div class="absolute inset-0 bg-gradient-to-l from-blue-950/90 via-transparent to-transparent"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-blue-950/60 via-transparent to-blue-950/40"></div>
+                    </div>
+                </template>
+
+                <div class="relative z-10 flex items-center justify-between mb-2">
+                    <div class="flex items-center gap-2">
+                        <span class="px-2 py-0.5 bg-amber-400 text-slate-900 font-black text-[10px] rounded-md shadow-xs">پیشنهاد ویژه</span>
+                    </div>
+                    <!-- Slide Indicators -->
+                    <div class="flex items-center gap-1">
+                        <template x-for="(offer, idx) in specialOffers" :key="idx">
+                            <span class="h-1 rounded-full transition-all duration-500" 
+                                  :class="currentOfferIndex === idx ? 'w-4 bg-amber-400' : 'w-1.5 bg-white/30'"></span>
+                        </template>
+                    </div>
+                </div>
+
+                <!-- Slider Container -->
+                <div class="relative z-10 min-h-[58px] overflow-hidden">
+                    <template x-for="(offer, idx) in specialOffers" :key="idx">
+                        <div x-show="currentOfferIndex === idx"
+                             x-transition:enter="transition opacity ease-in-out duration-1000"
+                             x-transition:enter-start="opacity-0"
+                             x-transition:enter-end="opacity-100"
+                             x-transition:leave="transition opacity ease-in-out duration-1000 absolute inset-0"
+                             x-transition:leave-start="opacity-100"
+                             x-transition:leave-end="opacity-0"
+                             class="w-full">
+                            <div class="flex items-center justify-between gap-2">
+                                <h3 class="font-black text-sm text-white drop-shadow-xs" x-text="offer.name"></h3>
+                            </div>
+                            <p class="text-[11px] text-blue-100/95 font-light mt-1.5 line-clamp-1 drop-shadow-xs" x-text="offer.description"></p>
+                        </div>
+                    </template>
+                </div>
+            </div>
         </div>
-      `).join("");
-    }
 
-    function setCategory(catName) {
-      activeCategory = catName;
-      renderCategories();
-      renderItems();
-    }
+        <!-- Categories Navigation (All Visible at Once, No Scroll) -->
+        <nav class="sticky top-[72px] z-30 glass-header py-2.5 px-3.5 my-1.5 shadow-xs">
+            <div class="flex flex-wrap gap-1.5 justify-center items-stretch">
+                <template x-for="cat in categories" :key="cat.id">
+                    <button 
+                        :id="'cat-btn-' + cat.id"
+                        @click="selectCategory(cat.id)"
+                        class="flex-1 min-w-[21%] py-2 px-2 rounded-xl text-[11px] font-bold transition-all duration-200 flex items-center justify-center gap-1.5 border text-center active:scale-95 shadow-2xs"
+                        :class="activeCategory === cat.id 
+                            ? 'bg-[#2e5fa7] text-white border-[#2e5fa7] shadow-sm shadow-blue-500/20 scale-[1.02]' 
+                            : 'bg-white/95 text-slate-700 border-slate-200 hover:bg-slate-100 hover:text-slate-900'"
+                    >
+                        <i :class="cat.icon" class="text-[11px] shrink-0"></i>
+                        <span class="whitespace-nowrap" x-text="cat.name"></span>
+                    </button>
+                </template>
+            </div>
+        </nav>
 
-    // Initial Execution
-    renderCategories();
-    renderItems();
-  </script>
+        <!-- Menu Items Grid -->
+        <main class="flex-1 px-4 space-y-3">
+            <!-- Active Category Title Header -->
+            <div class="flex items-center gap-2 pb-1.5 pt-1 border-b border-slate-200/80 mb-2">
+                <i :class="categories.find(c => c.id === activeCategory)?.icon" class="text-[#2e5fa7] text-sm"></i>
+                <h2 class="font-black text-slate-900 text-sm" x-text="categories.find(c => c.id === activeCategory)?.name"></h2>
+            </div>
+
+            <template x-for="item in filteredItems" :key="item.id">
+                <div :id="'item-' + item.id"
+                     :class="highlightedItemId === item.id ? 'ring-2 ring-[#2e5fa7] bg-blue-50/90 scale-[1.02]' : ''"
+                     class="glass-card p-3.5 rounded-2xl flex items-center gap-3.5 transition-all duration-300 hover:scale-[1.02] active:scale-[1.02] hover:bg-slate-100/80 active:bg-slate-100/80 border border-slate-200/90 shadow-xs group">
+                    
+                    <!-- Product Image Slot (Right Side in RTL) -->
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-xl bg-slate-100 border border-slate-200/70 overflow-hidden shrink-0 flex items-center justify-center relative group-hover:border-[#2e5fa7]/40 transition-colors">
+                        <img :src="item.image || 'https://placehold.co/160x160/f1f5f9/94a3b8?text=%D8%B9%DA%A9%D8%B3'" 
+                             :alt="item.name" 
+                             class="w-full h-full object-cover transition-all duration-300"
+                             :style="item.imageStyle ? item.imageStyle : (item.imagePosition ? `object-position: ${item.imagePosition}` : '')"
+                             onerror="this.onerror=null; this.src='https://placehold.co/160x160/f1f5f9/94a3b8?text=%D8%B9%DA%A9%D8%B3';"/>
+                    </div>
+
+                    <!-- Product Information -->
+                    <div class="flex-1 min-w-0 flex flex-col justify-between self-stretch py-0.5">
+                        <div>
+                            <div class="flex items-center justify-between gap-2">
+                                <h2 class="font-bold text-slate-900 text-sm group-hover:text-[#2e5fa7] transition-colors truncate" x-text="item.name"></h2>
+                                
+                                <!-- Badges (Hot/Cold) -->
+                                <template x-if="item.isHotCold">
+                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-[10px] font-bold bg-blue-50 text-[#2e5fa7] border border-blue-200/70 shrink-0">
+                                        <i class="fa-solid fa-snowflake text-[9px] text-sky-500"></i>
+                                        <span>سرد</span>
+                                        <span class="text-slate-300">/</span>
+                                        <i class="fa-solid fa-fire text-[9px] text-amber-500"></i>
+                                        <span>گرم</span>
+                                    </span>
+                                </template>
+                            </div>
+
+                            <!-- Description -->
+                            <template x-if="item.description">
+                                <p class="text-[11px] text-slate-500 font-normal mt-1 leading-relaxed line-clamp-2" x-text="item.description"></p>
+                            </template>
+                        </div>
+
+                        <!-- Price Tag -->
+                        <div class="flex items-center justify-between mt-2 pt-1.5 border-t border-slate-100">
+                            <span class="text-[10px] text-slate-400 font-medium" x-text="item.customPriceLabel ? 'سرو' : 'قیمت'"></span>
+                            <div class="flex items-center gap-1">
+                                <template x-if="item.customPriceLabel">
+                                    <span class="text-xs font-extrabold text-[#2e5fa7] bg-blue-50/80 px-2 py-0.5 rounded-md border border-blue-100" x-text="item.customPriceLabel"></span>
+                                </template>
+                                <template x-if="!item.customPriceLabel">
+                                    <div class="flex items-center gap-1">
+                                        <span class="text-base font-extrabold price-color" x-text="item.price"></span>
+                                        <span class="text-[10px] text-slate-400 font-medium">تومان</span>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </main>
+
+        <!-- Footer with Blue Hexagon partially overflowing from bottom -->
+        <footer class="mt-2 relative flex flex-col items-center justify-end overflow-hidden pt-1 pb-0">
+            <span class="text-[11px] font-black tracking-widest text-slate-400 uppercase -mb-1 z-10">INOTEX 2026</span>
+            <div class="relative flex flex-col items-center transform translate-y-1/2">
+                <!-- Blue Hexagon SVG -->
+                <svg class="w-20 h-20 fill-[#2e5fa7] filter drop-shadow-md" viewBox="0 0 100 115">
+                    <polygon points="50 0, 100 28.8, 100 86.6, 50 115, 0 86.6, 0 28.8" />
+                    <polygon points="50 25, 75 39.4, 75 72.1, 50 86.5, 25 72.1, 25 39.4" fill="#ffffff" />
+                </svg>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        function cafeMenu() {
+            return {
+                activeCategory: 'side',
+                currentOfferIndex: 0,
+                offerInterval: null,
+                highlightedItemId: null,
+
+                specialOffers: [
+                    { id: 5, catId: 'snack', name: 'سیمیت وجی (سبزیجات)', description: 'بادمجان مرینیت شده، پنیر خامه‌ای، ریحان ایتالیایی', image: 'https://i.ibb.co/PZhfcSZ5/simit.jpg' },
+                    { id: 6, catId: 'snack', name: 'چاپاتا پپرونی', description: 'پپرونی، فلفل تنوری، پنیر پارمسان', image: 'https://i.ibb.co/JRVWvZdv/ciabatta.jpg' },
+                    { id: 7, catId: 'snack', name: 'باگت مرغ تنوری', description: 'ژامبون مرغ ۹۰٪، گوجه مرینیت شده، سس پنیر', image: 'https://i.ibb.co/C5SGsyfP/baguette.jpg' }
+                ],
+
+                categories: [
+                    { id: 'coffee', name: 'قهوه', icon: 'fa-solid fa-mug-hot' },
+                    { id: 'tea', name: 'چای و دمنوش', icon: 'fa-solid fa-leaf' },
+                    { id: 'side', name: 'ساید', icon: 'fa-solid fa-bowl-food' },
+                    { id: 'cold', name: 'نوشیدنی سرد', icon: 'fa-solid fa-glass-water' },
+                    { id: 'snack', name: 'اسنک', icon: 'fa-solid fa-burger' },
+                    { id: 'dessert', name: 'دسر', icon: 'fa-solid fa-ice-cream' },
+                    { id: 'sweet', name: 'شیرینیجات', icon: 'fa-solid fa-cookie' }
+                ],
+
+                items: [
+                    // Coffee Items
+                    { id: 1, categoryId: 'coffee', name: 'اسپرسو', price: '۲۶۵,۰۰۰', isHotCold: false, image: 'https://i.ibb.co/DgC6nj7j/espresso.jpg' },
+                    { id: 2, categoryId: 'coffee', name: 'آمریکانو', price: '۲۷۵,۰۰۰', isHotCold: true, image: 'https://i.ibb.co/4ZvsV2Rn/americano.jpg' },
+                    { id: 3, categoryId: 'coffee', name: 'لته', price: '۳۲۰,۰۰۰', isHotCold: true, image: 'https://i.ibb.co/nNXyYd8y/latte.jpg' },
+                    { id: 4, categoryId: 'coffee', name: 'موکا', price: '۳۵۰,۰۰۰', isHotCold: true, image: 'https://i.ibb.co/5hFNvn0F/mocha.jpg' },
+
+                    // Tea & Herbal Drinks Items
+                    { id: 19, categoryId: 'tea', name: 'چای کلاسیک + ساید', price: '۲۲۸,۰۰۰', image: 'https://i.ibb.co/wrbXx0FY/classic-tea.jpg' },
+                    { id: 20, categoryId: 'tea', name: 'چای مراکشی + ساید', price: '۲۳۹,۰۰۰', image: 'https://i.ibb.co/wrbXx0FY/moroccan-tea.jpg' },
+                    { id: 21, categoryId: 'tea', name: 'دمنوش کندلوس + ساید', price: '۲۳۹,۰۰۰', image: 'https://i.ibb.co/FLSjJbKg/kandelous.jpg' },
+                    { id: 22, categoryId: 'tea', name: 'دمنوش به و دارچین + ساید', price: '۲۳۹,۰۰۰', image: 'https://i.ibb.co/1GMF4754/quince-cinnamon.jpg' },
+                    { id: 23, categoryId: 'tea', name: 'دمنوش سیب و دارچین + ساید', price: '۲۳۹,۰۰۰', image: 'https://i.ibb.co/5xkYY8v0/apple-cinnamon.jpg' },
+                    { id: 24, categoryId: 'tea', name: 'دمنوش گل گاو زبان + ساید', price: '۲۳۹,۰۰۰', image: 'https://i.ibb.co/6RvcvV8n/borage-tea.jpg' },
+
+                    // Side Items (Served with Tea/Herbal drinks)
+                    { id: 25, categoryId: 'side', name: 'کوکی دبل چاکلت', customPriceLabel: 'همراه با چای و دمنوش', image: 'https://i.ibb.co/zpvC2f7/double-chocolate-cookie.jpg' },
+                    { id: 26, categoryId: 'side', name: 'کوکی گردو شکلات', customPriceLabel: 'همراه با چای و دمنوش', image: 'https://i.ibb.co/fYtxXhZ3/walnut-chocolate-cookie.jpg' },
+                    { id: 27, categoryId: 'side', name: 'کوکی رژیمی جو', customPriceLabel: 'همراه با چای و دمنوش', image: 'https://i.ibb.co/hJK00Lh7/oat-diet-cookie.jpg' },
+                    { id: 28, categoryId: 'side', name: 'باقلوا بادام', customPriceLabel: 'همراه با چای و دمنوش', image: 'https://i.ibb.co/Bdyx4BB/almond-baklava.jpg' },
+                    { id: 29, categoryId: 'side', name: 'باقلوا پسته', customPriceLabel: 'همراه با چای و دمنوش', image: 'https://i.ibb.co/PvhhQ7Pb/pistachio-baklava.jpg' },
+                    { id: 30, categoryId: 'side', name: 'باقلوا گردو', customPriceLabel: 'همراه با چای و دمنوش', image: 'https://i.ibb.co/PvhhQ7Pb/walnut-baklava.jpg' },
+
+                    // Cold Drinks Items
+                    { id: 11, categoryId: 'cold', name: 'فیزیو', description: 'طعم‌ها: کولا موهیتو، کولا لیمو', price: '۷۵,۰۰۰', image: 'https://i.ibb.co/jZ1ctdWK/fizzio.jpg' },
+                    { id: 12, categoryId: 'cold', name: 'آب معدنی', price: '۲۲,۰۰۰', image: 'https://i.ibb.co/kVYwwG8s/water.jpg' },
+
+                    // Snack Items
+                    { id: 5, categoryId: 'snack', name: 'سیمیت وجی (سبزیجات)', description: 'بادمجان مرینیت شده، پنیر خامه‌ای، ریحان ایتالیایی', price: '۳۹۰,۰۰۰', image: 'https://i.ibb.co/PZhfcSZ5/simit.jpg' },
+                    { id: 6, categoryId: 'snack', name: 'چاپاتا پپرونی', description: 'پپرونی، فلفل تنوری، پنیر پارمسان', price: '۴۹۰,۰۰۰', image: 'https://i.ibb.co/JRVWvZdv/ciabatta.jpg' },
+                    { id: 7, categoryId: 'snack', name: 'باگت مرغ تنوری', description: 'ژامبون مرغ ۹۰٪، گوجه مرینیت شده، سس پنیر', price: '۵۹۰,۰۰۰', image: 'https://i.ibb.co/C5SGsyfP/baguette.jpg' },
+
+                    // Dessert Items
+                    { id: 8, categoryId: 'dessert', name: 'تیرامیسو توت فرنگی', price: '۲۸۵,۰۰۰', image: 'https://i.ibb.co/KCFnsS4/strawberry-tiramisu.jpg' },
+                    { id: 9, categoryId: 'dessert', name: 'تیرامیسو قهوه', price: '۲۸۵,۰۰۰', image: 'https://i.ibb.co/jkHYfQQN/coffee-tiramisu.jpg' },
+                    { id: 10, categoryId: 'dessert', name: 'تیرامیسو شکلات', price: '۲۸۵,۰۰۰', image: 'https://i.ibb.co/hFPDBvtF/chocolate-tiramisu.jpg' },
+
+                    // Sweets Items
+                    { id: 13, categoryId: 'sweet', name: 'کوکی تک', description: 'دبل چاکلت، گردو شکلات، رژیمی جو', price: '۱۳۸,۰۰۰', image: 'https://i.ibb.co/PfbTcZL/cookie.jpg' },
+                    { id: 14, categoryId: 'sweet', name: 'کروسان شکلات فندق', price: '۲۸۵,۰۰۰', image: 'https://i.ibb.co/Zz3JDmRF/chocolate-croissant.jpg' },
+                    { id: 15, categoryId: 'sweet', name: 'چاکلت تویست', price: '۲۱۰,۰۰۰', image: 'https://i.ibb.co/GfM0QQ3V/chocolate-twist.jpg' },
+                    { id: 16, categoryId: 'sweet', name: 'رول دارچین', price: '۱۹۰,۰۰۰', image: 'https://i.ibb.co/DPWbzkrj/cinnamon-roll.jpg' },
+                    { id: 17, categoryId: 'sweet', name: 'چری ترن اور', price: '۲۳۰,۰۰۰', image: 'https://i.ibb.co/F4XZQ7Q6/cherry-turnover.jpg' },
+                    { id: 18, categoryId: 'sweet', name: 'ریکوردات', price: '۱۹۸,۰۰۰', image: 'https://i.ibb.co/4wWQNP7j/ricordat.jpg' }
+                ],
+
+                init() {
+                    // Start 8-second auto slider for special offers
+                    this.offerInterval = setInterval(() => {
+                        this.currentOfferIndex = (this.currentOfferIndex + 1) % this.specialOffers.length;
+                    }, 8000);
+                },
+
+                get filteredItems() {
+                    return this.items.filter(item => item.categoryId === this.activeCategory);
+                },
+
+                selectCategory(catId) {
+                    this.activeCategory = catId;
+                },
+
+                goToOffer(offer) {
+                    if (!offer) return;
+                    this.selectCategory(offer.catId);
+                    this.highlightedItemId = offer.id;
+                    this.$nextTick(() => {
+                        const itemEl = document.getElementById('item-' + offer.id);
+                        if (itemEl) {
+                            itemEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                    });
+                    setTimeout(() => {
+                        this.highlightedItemId = null;
+                    }, 2500);
+                }
+            }
+        }
+    </script>
 </body>
 </html>
